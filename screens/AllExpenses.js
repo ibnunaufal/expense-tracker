@@ -4,10 +4,14 @@ import ExpensesOutput from '../components/ExpensesOutput/ExpensesOutput'
 
 export default function AllExpenses() {
   return (
-    <View>
+    <View style={styles.container}>
       <ExpensesOutput expensesPeriod={'Total'}/>
     </View>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex:1
+  }
+})
