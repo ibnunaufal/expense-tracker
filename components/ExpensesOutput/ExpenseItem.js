@@ -3,10 +3,13 @@ import React from "react";
 import { GlobalStyles } from "../../constant/styles";
 import getDate from "../../utils/date";
 import Rupiah from "../../utils/rupiah";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ExpenseItem({ desc, amount, date }) {
+  const navigation = useNavigation()
+
   function expensePressHandler() {
-    
+    navigation.navigate('ManageExpense')  ;
   }
   return (
     <Pressable
