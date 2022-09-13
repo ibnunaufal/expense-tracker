@@ -5,11 +5,13 @@ import getDate from "../../utils/date";
 import Rupiah from "../../utils/rupiah";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ExpenseItem({ desc, amount, date }) {
+export default function ExpenseItem({ id, desc, amount, date }) {
   const navigation = useNavigation()
 
   function expensePressHandler() {
-    navigation.navigate('ManageExpense')  ;
+    navigation.navigate('ManageExpense', {
+      expId: id
+    });
   }
   return (
     <Pressable

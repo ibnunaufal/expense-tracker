@@ -3,7 +3,7 @@ import React from "react";
 import ExpenseItem from "./ExpenseItem";
 
 function renderItem(itemData) {
-  return <ExpenseItem desc={itemData.item.desc} amount={itemData.item.amount} date={itemData.item.date} />
+  return <ExpenseItem id={itemData.item.id} desc={itemData.item.desc} amount={itemData.item.amount} date={itemData.item.date} />
 }
 
 export default function ExpensesList({ expenses }) {
