@@ -14,9 +14,15 @@ export default function ManageExpenses({ route, navigation }) {
     });
   }, [navigation, isEdit]);
 
-  function deleteExpense(id) {}
-  function cancel(id) {}
-  function confirm() {}
+  function deleteExpense(id) {
+    navigation.goBack();
+  }
+  function cancel(id) {
+    navigation.goBack();
+  }
+  function confirm() {
+    navigation.goBack();
+  }
 
   return (
     <View style={styles.container}>
