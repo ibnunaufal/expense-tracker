@@ -7,6 +7,7 @@ import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { deleteData, storeData, storeDate, updateData } from "../utils/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 export default function ManageExpenses({ route, navigation }) {
   const expId = route.params?.expId;
@@ -14,6 +15,7 @@ export default function ManageExpenses({ route, navigation }) {
   const expenseCtx = useContext(ExpensesContext);
   const selectedExpense = expenseCtx.expenses.find((exp) => exp.id === expId);
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState()
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,24 +25,43 @@ export default function ManageExpenses({ route, navigation }) {
 
   async function deleteExpense(id) {
     setIsLoading(true)
-    await deleteData(expId)
-    expenseCtx.deleteExpenses(expId);
-    // console.log("delete "+expId)
-    navigation.goBack();
+    try {
+      await deleteData(expId)
+      expenseCtx.deleteExpenses(expId);
+      // console.log("delete "+expId)
+      navigation.goBack();
+    } catch (error) {
+      setError(error)
+    }
+    setIsLoading(false)
   }
   function cancel(id) {
     navigation.goBack();
   }
   async function confirm(expenseData) {
     setIsLoading(true)
-    if (isEdit) {
-      await updateData(expId, expenseData)
-      expenseCtx.updateExpenses(expId, expenseData);
-    } else {
-      const id = await storeData(expenseData);
-      expenseCtx.addExpenses({...expenseData, id: id});
+    try {
+      if (isEdit) {
+        await updateData(expId, expenseData)
+        expenseCtx.updateExpenses(expId, expenseData);
+      } else {
+        const id = await storeData(expenseData);
+        expenseCtx.addExpenses({...expenseData, id: id});
+      }
+      setIsLoading(false)
+      navigation.goBack();
+    } catch (error) {
+      setIsLoading(false)
+      setError("Gagal menyimpan")
     }
-    navigation.goBack();
+  }
+
+  function errorHandler(){
+    setError(null)
+  }
+
+  if(error && !isLoading){
+    return <ErrorOverlay message={error} onConfirm={errorHandler} />
   }
 
   if(isLoading){

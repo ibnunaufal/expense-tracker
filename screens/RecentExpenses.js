@@ -5,23 +5,37 @@ import ExpensesOutput from "../components/ExpensesOutput/ExpensesOutput";
 import { getMinusDays } from "../utils/date";
 import { getData } from "../utils/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 export default function RecentExpenses() {
   const expenseCtx = useContext(ExpensesContext);
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState()
 
   const [fetchedData, setFetchedData] = useState([])
 
   useEffect(() => {
     async function getExp(){
       setIsLoading(true)
-      const expenses = await getData()
+      try{
+        const expenses = await getData()
+        expenseCtx.setExpenses(expenses)
+      }catch(error){
+        setError(error)
+      }
       setIsLoading(false)
-      expenseCtx.setExpenses(expenses)
       // setFetchedData(expenses)
     }
     getExp()
   }, []);
+
+  function errorHandler(){
+    setError(null)
+  }
+
+  if(error && !isLoading){
+    <ErrorOverlay message={error} onConfirm={errorHandler} />
+  }
 
   if(isLoading){
     return <LoadingOverlay />

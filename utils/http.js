@@ -25,11 +25,14 @@ export async function getData() {
   return expenses
 }
 
-export function updateData(id, data){
+export async function updateData(id, data){
   console.log(data)
-  return axios.put(API_URL + "expenses/"+id,+".json", data)
+  console.log(API_URL + `expenses/${id}.json`)
+  const response = await axios.put(API_URL + `expenses/${id}.json`, data)
+  console.log(response.data)
+  return 
 }
 
 export function deleteData(){
-  return axios.delete(API_URL + "expenses/"+id,+".json")
+  return axios.delete(API_URL + `expenses/${id}.json`)
 }
