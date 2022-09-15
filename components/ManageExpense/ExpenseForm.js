@@ -65,6 +65,7 @@ export default function ExpenseForm({
         <Input
           style={styles.row}
           label="Amount"
+          invalid={!inputs.amount.isValid}
           textInputConfig={{
             keyboardType: "decimal-pad",
             onChangeText: inputChangeHandler.bind(this, "amount"),
@@ -74,6 +75,7 @@ export default function ExpenseForm({
         <Input
           style={styles.row}
           label="Date"
+          invalid={!inputs.date.isValid}
           textInputConfig={{
             placeholder: "DD-MM-YYYY",
             maxLength: 10,
@@ -84,6 +86,7 @@ export default function ExpenseForm({
       </View>
       <Input
         label="Description"
+        invalid={!inputs.desc.isValid}
         textInputConfig={{
           multiline: true,
           autoCapitilize: true,
