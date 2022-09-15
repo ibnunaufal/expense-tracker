@@ -5,6 +5,7 @@ import { GlobalStyles } from "../constant/styles";
 import Button from "../components/UI/Button";
 import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import { storeData, storeDate } from "../utils/http";
 
 export default function ManageExpenses({ route, navigation }) {
   const expId = route.params?.expId;
@@ -30,6 +31,7 @@ export default function ManageExpenses({ route, navigation }) {
     if (isEdit) {
       expenseCtx.updateExpenses(expId, expenseData);
     } else {
+      storeData(expenseData);
       expenseCtx.addExpenses(expenseData);
     }
     navigation.goBack();
