@@ -18,6 +18,7 @@ const DUMMY_EXPENSES = [
 export const ExpensesContext = createContext({
   expenses: [],
   addExpenses: ({ desc, amount, date }) => {},
+  setExpenses: () => {},
   deleteExpenses: (id) => {},
   updateExpenses: (id, { desc, amount, date }) => {},
 });
@@ -25,8 +26,11 @@ export const ExpensesContext = createContext({
 function expensesReducer(state, action) {
   switch (action.type) {
     case "ADD":
-      const id = new Date().toString() + Math.random().toString;
-      return [{ ...action.payload, id: id }, ...state];
+      // const id = new Date().toString() + Math.random().toString;
+      return [action.payload, ...state];
+    case "SET":
+      const t = action.payload.reverse()
+      return t;
     case "UPDATE":
       const updatableExpenseIndex = state.findIndex(
         (expense) => expense.id === action.payload.id
@@ -35,7 +39,7 @@ function expensesReducer(state, action) {
       const updatedItem = { ...updatableExpense, ...action.payload.data };
       const updatedExpenses = [...state];
       updatedExpenses[updatableExpenseIndex] = updatedItem;
-      console.log(action.payload.data)
+      console.log(action.payload.data);
       return updatedExpenses;
     case "DELETE":
       // console.log(action.payload)
@@ -49,25 +53,30 @@ function expensesReducer(state, action) {
 }
 
 function ExpensesContextProvider({ children }) {
-  const [expensesState, dispatch] = useReducer(expensesReducer, DUMMY_EXPENSES);
+  const [expensesState, dispatch] = useReducer(expensesReducer, []);
 
   function addExpenses(expensesData) {
     dispatch({ type: "ADD", payload: expensesData });
   }
 
+  function setExpenses(expensesData) {
+    dispatch({ type: "SET", payload: expensesData });
+  }
+
   function deleteExpenses(id) {
-    console.log(id)
+    console.log(id);
     dispatch({ type: "DELETE", payload: id });
   }
 
   function updateExpenses(id, expensesData) {
-    console.log(expensesData)
+    console.log(expensesData);
     dispatch({ type: "UPDATE", payload: { id: id, data: expensesData } });
   }
 
   const value = {
     expenses: expensesState,
     addExpenses: addExpenses,
+    setExpenses: setExpenses,
     deleteExpenses: deleteExpenses,
     updateExpenses: updateExpenses,
   };
