@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { GlobalStyles } from "../../constant/styles";
+import Rupiah from "../../utils/rupiah";
 
 export default function ExpensesSummary({ expenses, periodName }) {
   const expensesSums = expenses.reduce((sum, expense) => {
@@ -9,7 +10,7 @@ export default function ExpensesSummary({ expenses, periodName }) {
   return (
     <View style={styles.rootContainer} >
       <Text style={styles.period} >{periodName}</Text>
-      <Text style={styles.amount} >Rp {expensesSums}</Text>
+      <Text style={styles.amount} >{Rupiah(expensesSums)}</Text>
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useLayoutEffect, useState } from "react";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constant/styles";
@@ -69,7 +69,7 @@ export default function ManageExpenses({ route, navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView keyboardShouldPersistTaps='handled' style={styles.container}>
       <ExpenseForm
         onSubmit={confirm}
         onCancel={cancel}
@@ -86,7 +86,7 @@ export default function ManageExpenses({ route, navigation }) {
           />
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
