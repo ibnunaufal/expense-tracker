@@ -9,7 +9,8 @@ import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 export default function ManageExpenses({ route, navigation }) {
   const expId = route.params?.expId;
   const isEdit = !!expId;
-  const expenseCtx = useContext(ExpensesContext)
+  const expenseCtx = useContext(ExpensesContext);
+  const selectedExpense = expenseCtx.expenses.find((exp) => exp.id === expId);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -18,29 +19,30 @@ export default function ManageExpenses({ route, navigation }) {
   }, [navigation, isEdit]);
 
   function deleteExpense(id) {
-    expenseCtx.deleteExpenses(expId)
+    expenseCtx.deleteExpenses(expId);
     // console.log("delete "+expId)
     navigation.goBack();
   }
   function cancel(id) {
     navigation.goBack();
   }
-  function confirm() {
-    if(isEdit){
-      expenseCtx.updateExpenses()
-    }else{
-      expenseCtx.addExpenses()
+  function confirm(expenseData) {
+    if (isEdit) {
+      expenseCtx.updateExpenses(expId, expenseData);
+    } else {
+      expenseCtx.addExpenses(expenseData);
     }
     navigation.goBack();
   }
 
   return (
     <View style={styles.container}>
-      <ExpenseForm />
-      <View style={styles.btnContainer}>
-        <Button style={styles.button} mode='flat' onPress={cancel} >Cancel</Button>
-        <Button style={styles.button} onPress={confirm} >{ isEdit?'Update':'Add' }</Button>
-      </View>
+      <ExpenseForm
+        onSubmit={confirm}
+        onCancel={cancel}
+        submitButtonLabel={isEdit ? "Edit" : "Add"}
+        defaultValue={selectedExpense}
+      />
       {isEdit && (
         <View style={styles.deleteContainer}>
           <IconButton
@@ -59,22 +61,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: GlobalStyles.colors.primary800
-  },
-  btnContainer: {
-    flexDirection: 'row',
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  button: {
-    minWidth: 120,
-    marginHorizontal: 8
+    backgroundColor: GlobalStyles.colors.primary800,
   },
   deleteContainer: {
     margin: 16,
     paddingTop: 8,
     borderTopWidth: 2,
     borderTopColor: GlobalStyles.colors.primary200,
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
